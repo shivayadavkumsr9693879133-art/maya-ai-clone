@@ -1,2 +1,18 @@
-# maya-ai-clone
-Android AI assistant clone inspired by Maya AI with voice, LLM, TTS, and action intents.
+# Gradle
+.gradle/
+**/build/
+
+# Local configuration
+local.properties
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Android generated
+*.apk
+*.aab
