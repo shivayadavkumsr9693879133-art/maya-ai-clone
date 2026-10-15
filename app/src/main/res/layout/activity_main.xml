@@ -1,106 +1,94 @@
-package com.maya.aiassistant
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#090D16"
+    android:orientation="vertical"
+    android:padding="12dp">
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.provider.Settings
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-class AssistantEngine {
+        <TextView
+            android:id="@+id/headerText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:paddingBottom="12dp"
+            android:text="Maya AI"
+            android:textColor="#EAF2FF"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    fun handle(query: String, activity: Activity): String {
-        val clean = query.trim()
-        if (clean.isBlank()) return "Please say or type something so I can help."
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:backgroundTint="#3A4758"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 
-        val lower = clean.lowercase()
+    <TextView
+        android:id="@+id/transcriptText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#101827"
+        android:padding="16dp"
+        android:scrollbars="vertical"
+        android:text=""
+        android:textColor="#D9E7FF"
+        android:textSize="16sp" />
 
-        if (lower.contains("hello") || lower.contains("hi")) {
-            return "Hello! I am Maya AI. I can help with calls, SMS, app launch, and quick smart assistant actions."
-        }
+    <EditText
+        android:id="@+id/queryInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="#172235"
+        android:hint="Type or speak your command..."
+        android:padding="16dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#A9B8D1" />
 
-        if (lower.contains("call")) {
-            val number = Regex("\\d{10,13}").find(clean)?.value
-            return if (number != null) {
-                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number"))
-                activity.startActivity(intent)
-                "Dialing $number now."
-            } else {
-                "I can place a call. Please provide a valid phone number."
-            }
-        }
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
 
-        if (lower.contains("sms") || lower.contains("message") || lower.contains("text")) {
-            val number = Regex("\\d{10,13}").find(clean)?.value
-            val message = extractMessage(clean)
-            return if (number != null) {
-                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("smsto:$number")
-                    putExtra("sms_body", message)
-                }
-                activity.startActivity(intent)
-                "Opening SMS to $number."
-            } else {
-                "I can send an SMS. Please provide the phone number and optional message."
-            }
-        }
+        <Button
+            android:id="@+id/speakButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#4F8CFF"
+            android:text="Speak"
+            android:textColor="#FFFFFF" />
 
-        if (lower.contains("open") || lower.contains("launch")) {
-            val appName = when {
-                lower.contains("youtube") -> "com.google.android.youtube"
-                lower.contains("whatsapp") -> "com.whatsapp"
-                lower.contains("chrome") -> "com.android.chrome"
-                lower.contains("settings") -> "android.settings.SETTINGS"
-                else -> null
-            }
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#1BBF93"
+            android:text="Send"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 
-            if (appName != null) {
-                val intent = if (appName == "android.settings.SETTINGS") {
-                    Intent(Settings.ACTION_SETTINGS)
-                } else {
-                    activity.packageManager.getLaunchIntentForPackage(appName)
-                        ?: Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appName"))
-                }
-                activity.startActivity(intent)
-                return "Opening the app now."
-            }
+    <Button
+        android:id="@+id/demoActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="#A455FF"
+        android:text="Demo Action"
+        android:textColor="#FFFFFF" />
 
-            return "I can open common apps like YouTube, WhatsApp, Chrome, or Settings. Tell me which one."
-        }
-
-        if (lower.contains("settings") || lower.contains("device")) {
-            activity.startActivity(Intent(Settings.ACTION_SETTINGS))
-            return "Opening device settings."
-        }
-
-        if (lower.contains("what") && lower.contains("you")) {
-            return "I am a Maya-inspired AI assistant for Android. I can process voice commands, place calls, send SMS, open apps, and give quick replies."
-        }
-
-        if (lower.contains("weather")) {
-            return "Live weather needs an API key. I’m ready for integration with OpenWeather, WeatherAPI, or a custom backend."
-        }
-
-        if (lower.contains("ai") || lower.contains("assistant") || lower.contains("help")) {
-            return "I can act as a smart Android assistant. Examples: call 9876543210, send SMS to 9876543210 saying hello, open YouTube, or open settings."
-        }
-
-        val fallback = if (clean.length > 140) {
-            clean.take(120) + "..."
-        } else {
-            clean
-        }
-
-        return "I understood: \"$fallback\". I’m ready to help with calls, messages, app launch, and simple AI-style guidance."
-    }
-
-    private fun extractMessage(clean: String): String {
-        val lower = clean.lowercase()
-        val keywordIndex = listOf("saying", "message", "text", "sms").mapNotNull { keyword ->
-            val idx = lower.indexOf(keyword)
-            if (idx >= 0) idx else null
-        }.minOrNull() ?: clean.length
-
-        val result = clean.substring(maxOf(keywordIndex, 0) + 1).trim()
-        return result.ifBlank { "Hello from Maya AI" }
-    }
-}
+</LinearLayout>

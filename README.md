@@ -1,18 +1,3 @@
-# Gradle
-.gradle/
-**/build/
+Advanced prototype with OpenAI integration, Settings screen, TTS, STT, and intent routing.
 
-# Local configuration
-local.properties
-
-# IDE
-.idea/
-*.iml
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Android generated
-*.apk
-*.aab
+See FEATURES.md for full details.

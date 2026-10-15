@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#090D16">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textColor="#EAF2FF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="12dp" />
+
+        <EditText
+            android:id="@+id/openaiKeyInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="OpenAI API Key (sk-...)"
+            android:inputType="textPassword"
+            android:background="#172235"
+            android:textColor="#FFFFFF"
+            android:padding="12dp" />
+
+        <Button
+            android:id="@+id/saveSettingsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#4F8CFF"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/clearHistoryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Clear Conversation History"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#D9534F"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</ScrollView>
